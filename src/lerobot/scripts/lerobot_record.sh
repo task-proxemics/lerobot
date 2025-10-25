@@ -1,4 +1,4 @@
-rm -rf /home/teamproxemics/.cache/huggingface/lerobot/t-nukala/asgard_training_data
+rm -rf /home/teamproxemics/.cache/huggingface/lerobot/xle/team_test
 python lerobot_record.py --robot.type=so101_follower \
     --robot.port=/dev/ttyACM1 \
     --robot.id=xle_left_follower \
@@ -8,9 +8,8 @@ python lerobot_record.py --robot.type=so101_follower \
     --teleop.id=xle_right_leader \
     --dataset.repo_id=xle/team_test \
     --display_data=true \
-    --dataset.push_to_hub=True \
+    --dataset.push_to_hub=False \
     --dataset.num_episodes=2 \
-    --dataset.repo_id='t-nukala/asgard_training_data' \
     --dataset.episode_time_s=60 \
     --dataset.reset_time_s=10 \
-    --dataset.single_task="Test first upload"
+    --dataset.single_task="Test record"
