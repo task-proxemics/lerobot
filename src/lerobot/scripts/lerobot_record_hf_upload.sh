@@ -8,6 +8,7 @@ python lerobot_record.py --robot.type=so101_follower \
     --dataset.repo_id=xle/team_test2 \
     --dataset.push_to_hub=False \
     --dataset.num_episodes=2 \
+    --dataset.repo_id='t-nukala/asgard_training_data' \
     --dataset.episode_time_s=60 \
     --dataset.reset_time_s=10 \
     --dataset.single_task="Test record"
