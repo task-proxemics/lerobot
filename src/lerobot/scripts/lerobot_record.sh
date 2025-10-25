@@ -1,0 +1,14 @@
+python lerobot_record.py \                           
+  --robot.type=so101_follower \                                                         
+  --robot.port=/dev/ttyACM2 \
+  --robot.id=xle_right_follower \
+  --robot.cameras="{wrist1: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30},realsense: {type: opencv, indoex_or_path: 0, width: 640, height: 480, fps: 30}} " \
+  --teleop.type=so101_leader \
+  --teleop.port=/dev/ttyACM3 \
+  --teleop.id=xle_right_leader \
+  --dataset.repo_id=xle/right_arm_demo \
+  --dataset.push_to_hub=False \
+  --dataset.num_episodes=2 \
+  --dataset.episode_time_s=60 \
+  --dataset.reset_time_s=10 \
+  --dataset.single_task="Hack Testing ASGARD on Thor"
