@@ -12,7 +12,8 @@ import time
 import numpy as np
 import math
 
-from lerobot.robots.xlerobot import  XLerobotConfig, XLerobot # XLerobotClient, XLerobotClientConfig,
+from lerobot.robots.xlerobot import XLerobotConfig, XLerobot
+# from lerobot.robots.xlerobot import XLerobotClient, XLerobotClientConfig
 from lerobot.utils.robot_utils import busy_wait
 from lerobot.utils.visualization_utils import init_rerun, log_rerun_data
 from lerobot.model.SO101Robot import SO101Kinematics
@@ -395,7 +396,7 @@ def main():
     robot = XLerobot(robot_config)
     
     try:
-        robot.connect()  ## NOTE: Set calibrate to True if arms are not calibrated
+        robot.connect()
         print(f"[MAIN] Successfully connected to robot")
     except Exception as e:
         print(f"[MAIN] Failed to connect to robot: {e}")

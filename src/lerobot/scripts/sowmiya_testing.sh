@@ -1,7 +1,8 @@
+rm -rf /home/teamproxemics/.cache/huggingface/lerobot/xle/team_test
 python lerobot_record.py --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=xle_left_follower \
-    --robot.cameras="{wrist1: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}, realsense: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 30}} "  \
+    --robot.cameras="{wrist1: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}, realsense: {type: opencv, index_or_path: 6, width: 640, height: 480, fps: 30}} "  \
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM3 \
     --teleop.id=xle_right_leader \

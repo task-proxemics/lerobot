@@ -44,7 +44,7 @@ def apply_joint_calibration(joint_name, raw_position):
     return raw_position  # If calibration coefficients not found, return raw value
 
 
-def move_to_zero_position(robot, duration=3.0, kp=0.1):
+def move_to_zero_position(robot, duration=3.0, kp=0.5):
     """
     Use P control to slowly move robot to zero position
     
@@ -188,7 +188,6 @@ def p_control_loop(robot, keyboard, target_positions, start_positions, kp=0.5, c
     control_period = 1.0 / control_freq
     
     print(f"Starting P control loop, control frequency: {control_freq}Hz, proportional gain: {kp}")
-    print("Really inside loop")
     
     while True:
         try:
@@ -196,7 +195,6 @@ def p_control_loop(robot, keyboard, target_positions, start_positions, kp=0.5, c
             keyboard_action = keyboard.get_action()
             
             if keyboard_action:
-                # print(f" Got valid keyboard action. Action is {keyboard_action}")
                 # Process keyboard input, update target positions
                 for key, value in keyboard_action.items():
                     if key == 'x':
@@ -205,8 +203,6 @@ def p_control_loop(robot, keyboard, target_positions, start_positions, kp=0.5, c
                         return_to_start_position(robot, start_positions, 0.2, control_freq)
                         return
                     
-                    
-                    print(f" Pressed Key is: {key}")
                     # Joint control mapping
                     joint_controls = {
                         'q': ('shoulder_pan', -1),    # Joint1 decrease
@@ -224,10 +220,8 @@ def p_control_loop(robot, keyboard, target_positions, start_positions, kp=0.5, c
                     }
                     
                     if key in joint_controls:
-                    	#print("Key is part of joint controls")
                         joint_name, delta = joint_controls[key]
                         if joint_name in target_positions:
-                            # print("Joint name in target positions")
                             current_target = target_positions[joint_name]
                             new_target = int(current_target + delta)
                             target_positions[joint_name] = new_target
@@ -248,10 +242,7 @@ def p_control_loop(robot, keyboard, target_positions, start_positions, kp=0.5, c
             # P control calculation
             robot_action = {}
             for joint_name, target_pos in target_positions.items():
-
-                # print(" Inside the target positions for loop")
                 if joint_name in current_positions:
-                    # print("Joint name in current positions . Yayy!")
                     current_pos = current_positions[joint_name]
                     error = target_pos - current_pos
                     
@@ -264,7 +255,6 @@ def p_control_loop(robot, keyboard, target_positions, start_positions, kp=0.5, c
             
             # Send action to robot
             if robot_action:
-                # print("Succes. Sending robot action")
                 robot.send_action(robot_action)
             
             time.sleep(control_period)

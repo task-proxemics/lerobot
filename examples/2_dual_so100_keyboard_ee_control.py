@@ -110,7 +110,7 @@ def inverse_kinematics(x, y, l1=0.1159, l2=0.1350):
     
     return joint2_deg, joint3_deg
 
-def move_to_zero_position(robots, duration=3.0, kp=0.15):
+def move_to_zero_position(robots, duration=3.0, kp=0.5):
     """
     Use P control to slowly move all robots to zero position
     
@@ -194,7 +194,7 @@ def move_to_zero_position(robots, duration=3.0, kp=0.15):
     
     print("All robots have moved to zero position")
 
-def return_to_start_position(robots, start_positions, kp=0.15, control_freq=50):
+def return_to_start_position(robots, start_positions, kp=0.5, control_freq=50):
     """
     Use P control to return to start position
     
@@ -251,7 +251,7 @@ def return_to_start_position(robots, start_positions, kp=0.15, control_freq=50):
     
     print("Return to start position completed")
 
-def p_control_loop(robots, keyboard, target_positions, start_positions, current_positions, kp=0.15, control_freq=50):
+def p_control_loop(robots, keyboard, target_positions, start_positions, current_positions, kp=0.5, control_freq=50):
     """
     P control loop
     
@@ -579,7 +579,7 @@ def main():
         print("Note: Dual arm robots will continuously move to target positions")
         
         # Start P control loop
-        p_control_loop(robots, keyboard, target_positions, start_positions, current_positions, kp=0.15, control_freq=50)
+        p_control_loop(robots, keyboard, target_positions, start_positions, current_positions, kp=0.5, control_freq=50)
         
         # Disconnect
         for arm_name, robot in robots.items():
