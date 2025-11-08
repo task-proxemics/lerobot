@@ -8,11 +8,11 @@ from lerobot.policies.utils import build_inference_frame, make_robot_action
 from lerobot.robots.so101_follower.config_so101_follower import SO101FollowerConfig
 from lerobot.robots.so101_follower.so101_follower import SO101Follower
 
-device = torch.device("cpu")  # or "cuda" or "cpu"
-model_id = "fracapuano/robot_learning_tutorial_act"
+device = torch.device("cuda")  # or "cuda" or "cpu"
+model_id = "ptizzza/act_so101_test3"
 model = ACTPolicy.from_pretrained(model_id)
 
-dataset_id = "lerobot/svla_so101_pickplace"
+dataset_id = "pr0tos/so101_single_tasks" 
 # This only downloads the metadata for the dataset, ~10s of MB even for large-scale datasets
 dataset_metadata = LeRobotDatasetMetadata(dataset_id)
 preprocess, postprocess = make_pre_post_processors(model.config, dataset_stats=dataset_metadata.stats)
@@ -30,8 +30,8 @@ MAX_STEPS_PER_EPISODE = 20
 # Camera keys must match the name and resolutions of the ones used for training!
 # You can check the camera keys expected by a model in the info.json card on the model card on the Hub
 camera_config = {
-    "side": OpenCVCameraConfig(index_or_path=6, width=640, height=480, fps=30),
-    "up": OpenCVCameraConfig(index_or_path=4, width=640, height=480, fps=30),
+    "wrist": OpenCVCameraConfig(index_or_path=0, width=640, height=480, fps=30, fourcc="MJPG"),
+    "up": OpenCVCameraConfig(index_or_path=4, width=640, height=480, fps=30, fourcc="MJPG"),
 }
 
 robot_cfg = SO101FollowerConfig(port=follower_port, id=follower_id, cameras=camera_config)
