@@ -5,10 +5,10 @@ from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
 from lerobot.policies.act.modeling_act import ACTPolicy
 from lerobot.policies.factory import make_pre_post_processors
 from lerobot.policies.utils import build_inference_frame, make_robot_action
-from lerobot.robots.so100_follower.config_so100_follower import SO100FollowerConfig
-from lerobot.robots.so100_follower.so100_follower import SO100Follower
+from lerobot.robots.so101_follower.config_so101_follower import SO101FollowerConfig
+from lerobot.robots.so101_follower.so101_follower import SO101Follower
 
-device = torch.device("mps")  # or "cuda" or "cpu"
+device = torch.device("cpu")  # or "cuda" or "cpu"
 model_id = "fracapuano/robot_learning_tutorial_act"
 model = ACTPolicy.from_pretrained(model_id)
 
@@ -18,10 +18,10 @@ dataset_metadata = LeRobotDatasetMetadata(dataset_id)
 preprocess, postprocess = make_pre_post_processors(model.config, dataset_stats=dataset_metadata.stats)
 
 # # find ports using lerobot-find-port
-follower_port = ...  # something like "/dev/tty.usbmodem58760431631"
+follower_port = "/dev/ttyACM1"  # something like "/dev/tty.usbmodem58760431631"
 
 # # the robot ids are used the load the right calibration files
-follower_id = ...  # something like "follower_so100"
+follower_id = "so101_follower"  # something like "follower_so100"
 
 MAX_EPISODES = 5
 MAX_STEPS_PER_EPISODE = 20
@@ -30,12 +30,12 @@ MAX_STEPS_PER_EPISODE = 20
 # Camera keys must match the name and resolutions of the ones used for training!
 # You can check the camera keys expected by a model in the info.json card on the model card on the Hub
 camera_config = {
-    "side": OpenCVCameraConfig(index_or_path=0, width=640, height=480, fps=30),
-    "up": OpenCVCameraConfig(index_or_path=1, width=640, height=480, fps=30),
+    "side": OpenCVCameraConfig(index_or_path=6, width=640, height=480, fps=30),
+    "up": OpenCVCameraConfig(index_or_path=4, width=640, height=480, fps=30),
 }
 
-robot_cfg = SO100FollowerConfig(port=follower_port, id=follower_id, cameras=camera_config)
-robot = SO100Follower(robot_cfg)
+robot_cfg = SO101FollowerConfig(port=follower_port, id=follower_id, cameras=camera_config)
+robot = SO101Follower(robot_cfg)
 robot.connect()
 
 for _ in range(MAX_EPISODES):
