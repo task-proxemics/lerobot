@@ -12,6 +12,8 @@ import usb.util
 from lerobot.robots.xlerobot.config_xlerobot import XLerobotConfig
 from lerobot.robots.xlerobot.xlerobot import XLerobot
 
+import time
+
 class Tuning:
     TIMEOUT = 100000
 
@@ -141,7 +143,7 @@ class SoundFollowingRobot:
         self.robot.connect(False)
 
         # scale factor
-        self.scale_factor = 5
+        self.scale_factor = 3
         self.angle_threshold = 5.0
 
         self.mic = self.find()
@@ -156,13 +158,16 @@ class SoundFollowingRobot:
     def get_sound_direction(self):
         return self.mic.read("DOAANGLE")
         
-    def robot_turn(self, speed):
-        data = {'x.vel': 0.0, 'y.vel': 0.0, 'theta.vel': int(speed/self.scale_factor)}
+    def robot_turn(self, speed, forward_speed= 0.0):
+        data = {'x.vel': forward_speed, 'y.vel': 0.0, 'theta.vel': int(speed/self.scale_factor)}
         _action_sent = self.robot.send_action(data)
 
     def run(self):
         try:
-            self.mic.set_vad_threshold(5)
+            # VAD stands for Voice Activity Detection
+            self.mic.set_vad_threshold(15)
+            # Loop to turn based on voice and move forward after 15 seconds
+            start = time.time()
             while True:
                 if robot.mic.is_voice():
                     sound_angle = self.get_sound_direction()
@@ -174,11 +179,16 @@ class SoundFollowingRobot:
                     if abs(angle_diff) < self.angle_threshold:
                         self.robot_turn(0)
                     else:
-                        self.robot_turn(angle_diff)
+                        if (time.time() - start) > 15.0:
+                            print("Moving forward and turning ...")
+                            self.robot_turn(angle_diff, 0.075)
+                        else:
+                            self.robot_turn(angle_diff)
                     print(f"voice angle: {sound_angle}")
                 else:
                     print('No voice detected!')
                 time.sleep(0.2)
+
         except KeyboardInterrupt:
             print("Finish")
         except Exception as e:
