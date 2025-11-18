@@ -3,22 +3,48 @@ import sys
 from datetime import datetime
 import speech_recognition as sr
 import socket
-from functools import partial
+import threading
 
 DEFAULT_MIC_INDEX = 4  # fallback if ReSpeaker can't be auto-detected
 SAMPLE_RATE = 16000    # adjust if your ReSpeaker uses a different rate
 
+# create a single persistent pyttsx3 engine and a lock to prevent concurrent calls
+try:
+    import pyttsx3
+    _tts_engine = pyttsx3.init()
+    _tts_lock = threading.Lock()
+    _pyttsx3_available = True
+except Exception:
+    _tts_engine = None
+    _tts_lock = threading.Lock()
+    _pyttsx3_available = False
+
 def _speak_pyttsx3(text: str) -> bool:
+    """Speak using a persistent pyttsx3 engine to avoid weakref GC errors."""
+    global _tts_engine
+    if not _pyttsx3_available or _tts_engine is None:
+        return False
     try:
-        import pyttsx3
+        with _tts_lock:
+            _tts_engine.setProperty("rate", 120)   # words per minute
+            _tts_engine.setProperty("volume", 1.0)
+            _tts_engine.say(text)
+            _tts_engine.runAndWait()
+            time.sleep(3.0)
+        return True
+    except ReferenceError:
+        # recreate engine and retry once if proxy was collected
+        try:
+            _tts_engine = pyttsx3.init()
+            with _tts_lock:
+                _tts_engine.say(text)
+                _tts_engine.runAndWait()
+                time.sleep(3.0)
+            return True
+        except Exception:
+            return False
     except Exception:
         return False
-    engine = pyttsx3.init()
-    engine.setProperty("rate", 150)     # words per minute
-    engine.setProperty("volume", 1.0)   # 0.0 to 1.0
-    engine.say(text)
-    engine.runAndWait()
-    return True
 
 def find_respeaker_index():
     names = sr.Microphone.list_microphone_names()
@@ -50,10 +76,27 @@ def callback(recognizer : sr.Recognizer, audio):
         # Check if text has the word "audience". If it does, send the following response to audio output channel
         if "audience" in text.lower():
             print("Audience detected! Sending response to audio output channel.")
-            time.sleep(2.0)  # brief pause before speaking
-            # Here you can add code to send the response to the audio output channel
-            # For example, you might use a text-to-speech library or send a message to another system
-            _speak_pyttsx3("Howdy Folks! How are you doing?")
+            time.sleep(4.0)  # brief pause before speaking
+
+            # Intro
+            _speak_pyttsx3("Howdy Folks! How are you doing? My name is Asgard. My creators endowed me with a sense of humor. Knock Knock. ")
+
+            # Knock Knock joke
+            _speak_pyttsx3(
+                "Lettuce. ")
+
+            # Punchline
+            _speak_pyttsx3(
+            "Lettuce in please. It's cold out here!  Ha ha. ")
+
+            # Parting words
+            _speak_pyttsx3("I want to also shout out Jinto Jose for being the best music DJ in the state of Texas. "
+            "And also shout out Tarun Reddy for being the best Thor GPU doctor I have ever had. "
+            "Oh, I am finally getting a good look at the audience. "
+            "This is a very smart and good looking group of Machine Learning and Robotics enthusiasts. "
+            "I am excited to see the Austin robotics ecosystem continue to grow. "
+            "Thank you for the opportunity to be here today. Go Longhorns!"
+            )
 
 
     except sr.UnknownValueError:
