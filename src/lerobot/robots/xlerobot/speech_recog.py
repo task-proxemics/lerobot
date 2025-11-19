@@ -99,6 +99,17 @@ def callback(recognizer : sr.Recognizer, audio):
             )
 
 
+        # Check if the text has the word "hello" 
+        if "hello" in text.lower():
+
+            print("Hello detected! Sending response to audio output channel.")
+            time.sleep(1.0)  # brief pause before speaking
+
+            # Intro
+            _speak_pyttsx3(" Hi, Hello, my name is Asgard. This is my first time at an Austin Robotics Meetup! Nice to meet you! ")
+
+
+
     except sr.UnknownValueError:
         # speech was unintelligible
         print(f"[{datetime.now().strftime('%H:%M:%S')}] <unrecognizable>")

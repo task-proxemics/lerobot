@@ -186,6 +186,8 @@ lerobot-imgtransform-viz="lerobot.scripts.lerobot_imgtransform_viz:main"
 lerobot-edit-dataset="lerobot.scripts.lerobot_edit_dataset:main"
 
 # ---------------- Tool Configurations ----------------
+[tool.hatch.metadata]
+allow-direct-references = true
 [tool.setuptools.packages.find]
 where = ["src"]
 
