@@ -78,22 +78,11 @@ def callback(recognizer : sr.Recognizer, audio):
             print("Audience detected! Sending response to audio output channel.")
             time.sleep(4.0)  # brief pause before speaking
 
-            # Intro
-            _speak_pyttsx3("Howdy Folks! How are you doing? My name is Asgard. My creators endowed me with a sense of humor. Knock Knock. ")
-
-            # Knock Knock joke
-            _speak_pyttsx3(
-                "Lettuce. ")
-
-            # Punchline
-            _speak_pyttsx3(
-            "Lettuce in please. It's cold out here!  Ha ha. ")
-
             # Parting words
-            _speak_pyttsx3("I want to also shout out Jinto Jose for being the best music DJ in the state of Texas. "
-            "And also shout out Tarun Reddy for being the best Thor GPU doctor I have ever had. "
+            _speak_pyttsx3(
+            "Howdy Folks! How are you doing? My name is Asgard. My creators endowed me with a sense of humor. Knock Knock. Who is there? Lettuce. Lettuce who? Lettuce in please. It's cold out here!  Ha ha. "
             "Oh, I am finally getting a good look at the audience. "
-            "This is a very smart and good looking group of Machine Learning and Robotics enthusiasts. "
+            "This is a smart and good looking group of Machine Learning and Robotics enthusiasts. "
             "I am excited to see the Austin robotics ecosystem continue to grow. "
             "Thank you for the opportunity to be here today. Go Longhorns!"
             )
@@ -108,7 +97,14 @@ def callback(recognizer : sr.Recognizer, audio):
             # Intro
             _speak_pyttsx3(" Hi, Hello, my name is Asgard. This is my first time at an Austin Robotics Meetup! Nice to meet you! ")
 
+        # Check if the text has the word "marcus" 
+        if "leader" in text.lower():
 
+            print("Hicam detected! Sending response to audio output channel.")
+            time.sleep(1.0)  # brief pause before speaking
+
+            # Intro
+            _speak_pyttsx3(" Hi, Hello, Marcus. My name is Asgard. I am very impressed by the High cam facility and your mission statement to accelerate advanced manufacturing in Texas. Great to meet you! ")
 
     except sr.UnknownValueError:
         # speech was unintelligible

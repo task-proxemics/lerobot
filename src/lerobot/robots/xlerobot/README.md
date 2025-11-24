@@ -44,7 +44,21 @@ python speech_recog.py
 
 ## 3. Anyskin Tactile Demo
 
+- Clone this repository:
+```
+git clone https://github.com/raunaqbhirangi/anyskin.git --recursive
+```
 
+- Install this package:
+```
+pip install -e .
+```
+
+- Running
+```
+cd anyskin/visualizations
+python anyskin_viz.py -p <ANYSKIN_PORT>
+```
 
 ## 4. Running audio navigation policy:
 
